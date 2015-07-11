@@ -1,7 +1,9 @@
 var clock = require('./clock.js');
 var rest = require('restify');
 var dateformat = require('dateformat');
+
 var currentPermanentData;
+var DELAY=1000;
 
 function start(){
 clock(function(date)
@@ -10,15 +12,11 @@ clock(function(date)
 });
 }
 
-var DELAY=1000;
-
 function display(data, isPermanent, delay){
-console.log('display');
 	if (!data)
 	{
 		return;
 	}
-
 
 	if (data instanceof Date)
 	{
