@@ -9,22 +9,36 @@ clock(function(date)
 });
 }
 
-function display(data, isPermanent){
-if (isPermanent)
-{
-currentPermanentData = isPermanent;
-}
-if (data instanceof Date)
-{
-	var date = data;
-	console.log(date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' (delta:'+date.getMilliseconds()+')');
-}
-else
-{
-	// Display the data, then go back to current permanent data
-	console.log(data);
-	display(currentPermanentData);
-}
+var DELAY=1000;
+
+function display(data, isPermanent, delay){
+console.log('display');
+	if (!data)
+	{
+		return;
+	}
+
+
+	if (data instanceof Date)
+	{
+		var date = data;
+		console.log(date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' (delta:'+date.getMilliseconds()+')');
+	}
+	else
+	{
+		// Display the data, then go back to current permanent data
+		console.log(data.toString());
+	}
+
+	if (isPermanent)
+	{
+		currentPermanentData = data;
+	}
+	// back to permanent data after delay
+	else if (currentPermanentData && data !== currentPermanentData)
+	{
+		setTimeout(function(){display(currentPermanentData);}, DELAY);
+	}
 }
 
 module.exports.start = start;
