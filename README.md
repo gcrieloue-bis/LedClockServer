@@ -3,10 +3,9 @@
 work in progress…
 
 Launch a "clock" server which :
-
-* display clock every minute
-* listen REST commands to display animations, messages, etc
-* Go back to clock after a delay 
+* display clock
+* listen REST commands to display (temporary) animations and  messages
+* Go back to clock, once the message/animation is over, after a delay 
 
 Destination Hardware : 
 * Raspberry pi (2)
