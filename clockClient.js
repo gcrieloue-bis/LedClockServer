@@ -1,5 +1,6 @@
 var clock = require('./clock.js');
 var rest = require('restify');
+var dateformat = require('dateformat');
 var currentPermanentData;
 
 function start(){
@@ -22,7 +23,7 @@ console.log('display');
 	if (data instanceof Date)
 	{
 		var date = data;
-		console.log(date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()+' (delta:'+date.getMilliseconds()+')');
+		console.log(dateformat(date,'HH:MM:ss')+' (delta:'+date.getMilliseconds()+')');
 	}
 	else
 	{
