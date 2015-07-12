@@ -3,40 +3,59 @@ var rest = require('restify');
 var dateformat = require('dateformat');
 
 var currentPermanentData;
-var DELAY=1000;
+var DELAY=2000;
 
 function start(){
-clock(function(date)
-{
-	display(date, true);
-});
+	clock(function()
+	{
+		display();
+	});
 }
 
-function display(data, isPermanent, delay){
+function showClock()
+{
+	var date = new Date();
+	console.log(dateformat(date,'HH:MM:ss')+' (delta:'+date.getMilliseconds()+')');
+}
+
+var displayEventQueue = [];
+var displayBusy = false;
+
+function display(data, delay){
 	if (!data)
 	{
+		if(!displayBusy){
+			showClock();
+		}
 		return;
 	}
 
-	if (data instanceof Date)
-	{
-		var date = data;
-		console.log(dateformat(date,'HH:MM:ss')+' (delta:'+date.getMilliseconds()+')');
-	}
-	else
-	{
-		// Display the data, then go back to current permanent data
-		console.log(data.toString());
-	}
+	var displayEvent = {};
+	displayEvent.data = data;
+	displayEvent.delay = delay;
+	displayEventQueue.push(displayEvent);
 
-	if (isPermanent)
-	{
-		currentPermanentData = data;
+	if(!displayBusy){
+		consumeEvents();
 	}
-	// back to permanent data after delay
-	else if (currentPermanentData && data !== currentPermanentData)
+}
+
+function consumeEvents()
+{
+	displayBusy = true;
+	var displayEvent = displayEventQueue.shift();
+
+	console.log(displayEvent);
+
+	if (displayEventQueue.length)
 	{
-		setTimeout(function(){display(currentPermanentData);}, DELAY);
+		setTimeout(consumeEvents, DELAY);
+	}
+	else {
+		setTimeout(function(){
+			displayBusy=false;
+			showClock()
+		}, DELAY);
 	}
 }
 

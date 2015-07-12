@@ -8,7 +8,7 @@ server.get('/notify/:text/:delay', notify);
 function notify(req, res, next)
 {
 	res.send("'"+req.params.text+"' sent");
-	clockClient.display(req.params.text);
+	clockClient.display(req.params.text, req.params.delay);
 	next();
 }
 
