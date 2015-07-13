@@ -1,6 +1,7 @@
 var clock = require('./clock.js');
 var rest = require('restify');
 var dateformat = require('dateformat');
+var ledMatrix = require('./ledMatrix.js'); 
 
 // default delay
 var DELAY=2000;
@@ -51,6 +52,10 @@ function consumeEvents()
 	}
 
 	console.log(displayEvent);
+	if (displayEvent.data=="sayHello")
+	{
+		ledMatrix.sayHello();
+	}	
 
 	// if other events available, consume them.
 	if (displayEventQueue.length)

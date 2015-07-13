@@ -1,4 +1,3 @@
-
 //This module send time to the callback when time minutes are 0
 module.exports = function(callback)
 {
@@ -16,5 +15,5 @@ module.exports = function(callback)
 			setTimeout(tick, 500-new Date().getMilliseconds());
 		}
 	};
-tick();
+	tick();
 };
