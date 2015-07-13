@@ -13,7 +13,6 @@
 #include <unistd.h>
 
 using namespace rgb_matrix;
-//{
 
 extern "C" {
 static bool parseColor(Color *c, const char *str) {
@@ -71,5 +70,4 @@ void displayText(char *str) {
   delete canvas;
 
 }
-//}
 }
