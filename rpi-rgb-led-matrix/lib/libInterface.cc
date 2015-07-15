@@ -1,8 +1,5 @@
-// -*- mode: c++; c-basic-offset: 2; indent-tabs-mode: nil; -*-
-// Small example how write text.
-//
-// This code is public domain
-// (but note, that the led-matrix library this depends on is GPL v2)
+// Expose key features of the lib for the project purpose
+// Those can then be used by nodejs with node-ffi.
 
 #include "led-matrix.h"
 #include "graphics.h"
@@ -15,7 +12,7 @@
 using namespace rgb_matrix;
 
 extern "C" {
-    static bool parseColor(Color *c, const char *str) {
+    bool parseColor(Color *c, const char *str) {
         return sscanf(str, "%hhu,%hhu,%hhu", &c->r, &c->g, &c->b) == 3;
     }
 
@@ -25,8 +22,7 @@ extern "C" {
         return "hello";
     }
 
-    int displayText(char *str) {
-        Color color(255, 255, 0);
+    int display(char *str, Color* color) {
         const char *bdf_font_file = "/home/pi/LedClockServer/rpi-rgb-led-matrix/fonts/8x13B.bdf";
         int rows = 16;
         int chain = 1;
@@ -55,16 +51,16 @@ extern "C" {
         RGBMatrix *canvas = new RGBMatrix(&io, rows, chain, parallel);
 
         bool all_extreme_colors = true;
-        all_extreme_colors &= color.r == 0 || color.r == 255;
-        all_extreme_colors &= color.g == 0 || color.g == 255;
-        all_extreme_colors &= color.b == 0 || color.b == 255;
+        all_extreme_colors &= color->r == 0 || color->r == 255;
+        all_extreme_colors &= color->g == 0 || color->g == 255;
+        all_extreme_colors &= color->b == 0 || color->b == 255;
         if (all_extreme_colors)
             canvas->SetPWMBits(1);
 
         const int x = x_orig;
         int y = y_orig;
 
-        rgb_matrix::DrawText(canvas, font, x, y + font.baseline(), color, str);
+        rgb_matrix::DrawText(canvas, font, x, y + font.baseline(), *color, str);
 
         // Finished. Shut down the RGB matrix.
         canvas->Clear();
@@ -72,4 +68,17 @@ extern "C" {
 
         return 0;
     }
+    
+    int displayTextWithColor(char *str, char *colorStr)
+    {
+        Color color(255,255,255);
+        parseColor(&color, colorStr);
+        return display(str, &color);
+    }
+
+    int displayText(char *str) {
+        Color color(255,255,0);
+        return display(str, &color);
+    }
+
 }
